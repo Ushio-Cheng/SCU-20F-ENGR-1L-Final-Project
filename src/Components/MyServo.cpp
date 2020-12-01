@@ -4,7 +4,7 @@
 
 
 MyServo::MyServo(int pin){
-    this->servo = new Servo;
+    this->servo = new Servo();
     this->servo->attach(pin);
 }
 
