@@ -21,6 +21,8 @@ BidirectionalDrive::~BidirectionalDrive(){
 }
 
 void BidirectionalDrive::setDirection(DriveDirection direction){
+    getCurrentActiveDriveTrain()->setBreakStatus(true);
+    getCurrentActiveDriveTrain()->setBreakStatus(false);
     this->currentDirection = direction;
     if (direction==LEFT_RIGHT)
     {
