@@ -22,7 +22,12 @@ public:
      * @param radius radius of travel
      */
     void setSpeed(unsigned char speed, TurnDirection direction = None, int radius = 100);
-    
+
+    /*
+     * Set break
+     * REMARK: when break is released speed is set to 0
+     * @param applied if true, would set driver pin to 1,1
+     */
     void setBreakStatus(bool appplied = true);
 };
 
