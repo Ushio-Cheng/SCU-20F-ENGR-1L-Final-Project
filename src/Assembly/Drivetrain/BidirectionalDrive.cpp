@@ -7,8 +7,10 @@ BidirectionalDrive::BidirectionalDrive(DifferentialDrive* drivetrainFB, Differen
     this->servo = servo;
     int pos1 = ((int)servoPosLR)+(servoPosLR-servoPosFB)*6;
     int pos2 = ((int)servoPosLR)+(servoPosLR-servoPosFB)*2;
+    // Set servo over the designated position to create enough torque.
     this->servoActivatedPos1 = pos1>180?180:pos1;
     this->servoActivatedPos2 = pos2>100?100:pos2;
+    // Need to reset servo to prevent high current draw.
     this->servoActivatedPos3 = servoPosLR;
     this->servoUnactivatedPos = servoPosFB;
     this->drivetrainFB = drivetrainFB;
