@@ -2,7 +2,6 @@
 #include "Components/Button.hpp"
 #include "Components/MyServo.hpp"
 #include "UselessSwitch.hpp"
-#include "Global.cpp"
 #include "Scheduler/Scheduler.hpp"
 
 void setupEvents(MyServo* servo, Button* theSwitch, int servoPos);
@@ -38,7 +37,7 @@ void UselessSwitch::update(){
     if (!this->theSwitch->isDown()) return;
     this->servo->setAngle(servoActPos);
     Task1* task = new Task1(this);
-    G_MAIN_SCHEDULAR.scheduleGlobalEvent(task);
+    getGlobalScheduler()->scheduleGlobalEvent(task);
 }
 
 

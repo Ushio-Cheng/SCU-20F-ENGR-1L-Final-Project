@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "DistanceSensor.hpp"
-#include "Global.cpp"
 
 DistanceSensor::DistanceSensor(int IOPinNum){
     this->dataPin = IOPinNum;

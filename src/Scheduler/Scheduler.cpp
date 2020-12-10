@@ -36,3 +36,13 @@ void Scheduler::scheduleGlobalEvent(Task* task){
     scheduledTasks[scheduledTasksCount] = task;
     scheduledTasksCount++;
 }
+
+Scheduler* G_MAIN_SCHEDULER;
+
+Scheduler* getGlobalScheduler(){
+    return G_MAIN_SCHEDULER;
+}
+
+void initScheduler(){
+    G_MAIN_SCHEDULER = new Scheduler();
+}

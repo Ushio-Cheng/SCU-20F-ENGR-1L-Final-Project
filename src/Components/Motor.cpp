@@ -1,7 +1,7 @@
 #include "Motor.hpp"
 #include <Arduino.h>
 
-Motor::Motor(int CtrPin1, int CtrPin2, bool reversed = false)
+Motor::Motor(int CtrPin1, int CtrPin2, bool reversed)
 {
     if (!reversed)
     {
@@ -20,7 +20,7 @@ Motor::Motor(int CtrPin1, int CtrPin2, bool reversed = false)
     this->breakEnabled = false;
 }
 
-void Motor::setSpeed(unsigned char newSpeed, bool reverse = false)
+void Motor::setSpeed(unsigned char newSpeed, bool reverse)
 {
     this->travelInReverse = reverse;
     this->currentSpeed = newSpeed;

@@ -22,7 +22,7 @@ public:
      */
     bool (*trigger)();
     virtual bool checkTrigger(){
-        trigger();
+        return trigger();
     }
     /**
      * Code to execute on event.
@@ -62,5 +62,7 @@ public:
      */
     void scheduleGlobalEvent(Task* task);
 };
+Scheduler* getGlobalScheduler();
+void initScheduler();
 
 #endif
