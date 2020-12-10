@@ -20,6 +20,9 @@ public:
      * THREADT: Non-Blocking, would use scheduler.
      */
     void update();
+
+    bool checkServo();
+    void callback();
 };
 
 

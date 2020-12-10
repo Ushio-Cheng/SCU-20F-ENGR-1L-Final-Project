@@ -18,23 +18,34 @@ UselessSwitch::UselessSwitch(MyServo* servo, Button* theSwitch, int servoRestPos
 UselessSwitch::~UselessSwitch() {
 }
 
+class Task1:public Task{
+public:
+    UselessSwitch* caller;
+    Task1(UselessSwitch* caller){
+        this->caller = caller;
+        this->trigger = []{return true;};
+        this->exec = []{};
+    }
+    virtual bool checkTrigger() final {
+        return caller->checkServo();
+    }
+    virtual void execute() final {
+        caller->callback();
+    }
+};
+
 void UselessSwitch::update(){
     if (!this->theSwitch->isDown()) return;
     this->servo->setAngle(servoActPos);
+    Task1* task = new Task1(this);
+    G_MAIN_SCHEDULAR.scheduleGlobalEvent(task);
 }
 
-void setupEvents(MyServo* servo, Button* theSwitch, int servoPos){
-    G_MAIN_SCHEDULAR.scheduleGlobalEvent(new Task(
-        []{return true;},
-        []{Serial.begin(9600);}
-    ));
-    G_MAIN_SCHEDULAR.scheduleGlobalEvent(new Task(
-        [theSwitch]()->bool{
-            bool tmp = theSwitch->isDown();
-            return tmp;
-        },
-        [=]()->void{ 
-            servo->setAngle(servoPos); 
-        }
-    ));
+
+bool UselessSwitch::checkServo(){
+    return !theSwitch->isDown();
+}
+
+void UselessSwitch::callback(){
+    servo->setAngle(servoRestPos);
 }
