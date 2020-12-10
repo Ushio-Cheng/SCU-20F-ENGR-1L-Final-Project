@@ -7,6 +7,8 @@
  */
 struct Task
 {
+    // Default full constructor to construct inline.
+    Task(bool (*trigger)(),void (*exec)()){this->trigger = trigger; this->exec = exec;};
     /**
      * Trigger is a function pointer that accepts nothing and returns bool.
      * event would execute on true
