@@ -4,7 +4,7 @@ void Scheduler::schedulerCycle(){
     triggeredTasksCount = 0;
     for(unsigned short i = 0; i<scheduledTasksCount; i++) {
         Task* task = scheduledTasks[i];
-        if (task->trigger()) {
+        if (task->checkTrigger()) {
             triggeredTasksIndex[triggeredTasksCount] = i;
             triggeredTasksCount++;
         }
@@ -12,7 +12,7 @@ void Scheduler::schedulerCycle(){
 
     for (unsigned short i = 0; i < triggeredTasksCount; i++) {
         Task* task = scheduledTasks[triggeredTasksIndex[i]];
-        task->exec();
+        task->execute();
     }
     
     // Remove all triggered tasks from task pool

@@ -5,19 +5,32 @@
  * Scheduler Task
  * WARNING: each task should be finished in 100ms.
  */
-struct Task
+class Task
 {
+public:
+    Task(){
+        this->trigger = []{return true;};
+        this->exec = []{};
+    }
     // Default full constructor to construct inline.
     Task(bool (*trigger)(),void (*exec)()){this->trigger = trigger; this->exec = exec;};
+    
+
     /**
      * Trigger is a function pointer that accepts nothing and returns bool.
      * event would execute on true
      */
     bool (*trigger)();
+    virtual bool checkTrigger(){
+        trigger();
+    }
     /**
      * Code to execute on event.
      */
     void (*exec)();
+    virtual void execute(){
+        exec();
+    }
 };
 
 #define MAX_SCHEDULER_TASK 64
