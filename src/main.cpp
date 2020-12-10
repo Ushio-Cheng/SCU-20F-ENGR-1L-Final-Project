@@ -1,9 +1,9 @@
 #include <Arduino.h>
-// #include "Components/MyServo.hpp"
-#include <Servo.h>
+#include "Global.cpp"
 #include "Components/Button.hpp"
 #include "Assembly/Drivetrain/BidirectionalDrive.hpp"
 #include "Assembly/Drivetrain/DifferentialDrive.hpp"
+#include "Assembly/Arm/Arm.hpp"
 #include "Components/Motor.hpp"
 #include "Components/MyServo.hpp"
 
@@ -15,15 +15,17 @@ Motor motorZR = Motor(12,13);
 DifferentialDrive driveFW = DifferentialDrive(&motorXL,&motorXR,11);
 DifferentialDrive driveLR = DifferentialDrive(&motorZL,&motorZR,9.5);
 BidirectionalDrive drivetrain = BidirectionalDrive(&driveFW,&driveLR,&drivetrainServo,30,0);
-Button button = Button(A1);
+Motor armMotor = Motor(1,0);
+Button armRaisedLimitSw = Button(A3);
+Button armLoweredLimitSw = Button(A2);
+Arm arm = Arm(&armMotor, &armLoweredLimitSw, &armRaisedLimitSw);
+
+
+
 
 void setup(){
-    
 }
 
 void loop(){
-    if (button.isDown())  drivetrain.setDirection(LEFT_RIGHT);
-    else drivetrain.setDirection(FWD_BACK);
-    
-    drivetrain.getCurrentActiveDriveTrain()->setSpeed(100);
+    G_MAIN_SCHEDULAR.schedulerCycle();
 }
