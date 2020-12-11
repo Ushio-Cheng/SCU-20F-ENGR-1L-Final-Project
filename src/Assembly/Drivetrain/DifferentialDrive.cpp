@@ -2,7 +2,7 @@
 #include "DifferentialDrive.hpp"
 #include "Components/Motor.hpp"
 
-DifferentialDrive::DifferentialDrive(Motor* leftMotor, Motor* rightMotor, double motorDistance)
+DifferentialDrive::DifferentialDrive(Motor *leftMotor, Motor *rightMotor, double motorDistance)
 {
     this->leftMotor = leftMotor;
     this->rightMotor = rightMotor;
@@ -10,19 +10,24 @@ DifferentialDrive::DifferentialDrive(Motor* leftMotor, Motor* rightMotor, double
     this->breakEnabled = false;
 }
 
-DifferentialDrive::~DifferentialDrive()
+void DifferentialDrive::setSpeed(unsigned char speed, TurnDirection direction = None, int radius = 100)
 {
-}
-
-void DifferentialDrive::setSpeed(unsigned char speed, TurnDirection direction = None, int radius = 100){
+    // make sure break is released.
     setBreakStatus(false);
-    if (direction==None){
+    if (direction == None)
+    {
         leftMotor->setSpeed(speed);
         rightMotor->setSpeed(speed);
-    } else {
-        unsigned char lspeed = ((double)speed)*(radius-motorDistance/2)/(radius+motorDistance/2);
-        if (lspeed<0) lspeed = 0;
-        if (lspeed>255) lspeed = 255;
+    }
+    else
+    {
+        // The lower speed in differential drive.
+        unsigned char lspeed = ((double)speed) * (radius - motorDistance / 2) / (radius + motorDistance / 2);
+        // Limit lower speed to range
+        if (lspeed < 0)
+            lspeed = 0;
+        if (lspeed > 255)
+            lspeed = 255;
         switch (direction)
         {
         case Left:
@@ -37,7 +42,8 @@ void DifferentialDrive::setSpeed(unsigned char speed, TurnDirection direction = 
     }
 }
 
-void DifferentialDrive::setBreakStatus(bool applied = true){
+void DifferentialDrive::setBreakStatus(bool applied = true)
+{
     leftMotor->setBreak(applied);
     rightMotor->setBreak(applied);
 }

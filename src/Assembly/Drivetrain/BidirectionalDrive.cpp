@@ -3,50 +3,50 @@
 #include "Assembly/Drivetrain/DifferentialDrive.hpp"
 #include <Arduino.h>
 
-BidirectionalDrive::BidirectionalDrive(DifferentialDrive* drivetrainFB, DifferentialDrive* drivetrainLR, MyServo* servo, unsigned char servoPosLR, unsigned char servoPosFB){
+BidirectionalDrive::BidirectionalDrive(
+    DifferentialDrive *drivetrainFB,
+    DifferentialDrive *drivetrainLR,
+    MyServo *servo,
+    void (*setServoFB)(MyServo *),
+    void (*setServoLR)(MyServo *))
+{
     this->servo = servo;
-    int pos1 = ((int)servoPosLR)+(servoPosLR-servoPosFB)*6;
-    int pos2 = ((int)servoPosLR)+(servoPosLR-servoPosFB)*2;
-    // Set servo over the designated position to create enough torque.
-    this->servoActivatedPos1 = pos1>180?180:pos1;
-    this->servoActivatedPos2 = pos2>100?100:pos2;
-    // Need to reset servo to prevent high current draw.
-    this->servoActivatedPos3 = servoPosLR;
-    this->servoUnactivatedPos = servoPosFB;
+    this->setServoLR = setServoLR;
+    this->setSetvoFB = setSetvoFB;
     this->drivetrainFB = drivetrainFB;
     this->drivetrainLR = drivetrainLR;
     this->currentDirection = FWD_BACK;
-    this->servo->setAngle(this->servoUnactivatedPos);
+    setSetvoFB(this->servo);
 }
 
-BidirectionalDrive::~BidirectionalDrive(){
-}
-
-void BidirectionalDrive::setDirection(DriveDirection direction){
+void BidirectionalDrive::setDirection(DriveDirection direction)
+{
     getCurrentActiveDriveTrain()->setBreakStatus(true);
     getCurrentActiveDriveTrain()->setBreakStatus(false);
     this->currentDirection = direction;
-    if (direction==LEFT_RIGHT)
+    if (direction == LEFT_RIGHT)
     {
-        this->servo->setAngle(servoActivatedPos1);
-        delay(100);
-        this->servo->setAngle(servoActivatedPos2);
-        delay(100);
-        this->servo->setAngle(servoActivatedPos3);
-    } else {
-        this->servo->setAngle(servoUnactivatedPos);
+        setServoLR(servo);
+    }
+    else
+    {
+        setSetvoFB(servo);
     }
 }
 
-DriveDirection BidirectionalDrive::getDirection(){
+DriveDirection BidirectionalDrive::getDirection()
+{
     return currentDirection;
 }
 
-DifferentialDrive* BidirectionalDrive::getCurrentActiveDriveTrain(){
-    if (currentDirection==LEFT_RIGHT){
+DifferentialDrive *BidirectionalDrive::getCurrentActiveDriveTrain()
+{
+    if (currentDirection == LEFT_RIGHT)
+    {
         return drivetrainLR;
-    } else {
+    }
+    else
+    {
         return drivetrainFB;
     }
 }
-

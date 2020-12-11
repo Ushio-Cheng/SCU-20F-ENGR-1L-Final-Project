@@ -4,9 +4,10 @@
 #include "UselessSwitch.hpp"
 #include "Scheduler/Scheduler.hpp"
 
-void setupEvents(MyServo* servo, Button* theSwitch, int servoPos);
+void setupEvents(MyServo *servo, Button *theSwitch, int servoPos);
 
-UselessSwitch::UselessSwitch(MyServo* servo, Button* theSwitch, int servoRestPos, int servoActPos) {
+UselessSwitch::UselessSwitch(MyServo *servo, Button *theSwitch, int servoRestPos, int servoActPos)
+{
     this->servo = servo;
     this->theSwitch = theSwitch;
     this->servoRestPos = servoRestPos;
@@ -14,37 +15,74 @@ UselessSwitch::UselessSwitch(MyServo* servo, Button* theSwitch, int servoRestPos
     this->servo->setAngle(servoRestPos);
 }
 
-UselessSwitch::~UselessSwitch() {
+UselessSwitch::~UselessSwitch()
+{
 }
 
-class Task1:public Task{
+/**
+ * A Periodic Scheduler Task to check condition of the useless switch.  
+ * Should execute on every cycle.  
+ * @link Scheduler.hpp
+ */
+class UselessSwitchWatcher : public Task
+{
 public:
-    UselessSwitch* caller;
-    Task1(UselessSwitch* caller){
+    UselessSwitch *caller;
+    UselessSwitchWatcher(UselessSwitch *caller) : Task()
+    {
         this->caller = caller;
-        this->trigger = []{return true;};
-        this->exec = []{};
     }
-    virtual bool checkTrigger() final {
-        return caller->checkServo();
+    virtual bool checkTrigger() final
+    {
+        return true;
     }
-    virtual void execute() final {
-        caller->callback();
+    virtual void execute() final
+    {
+        caller->update();
     }
 };
 
-void UselessSwitch::update(){
-    if (!this->theSwitch->isDown()) return;
+/**
+ * A Task that asychroniously wait for servo to turn the switch off.
+ */
+class WaitForServoTask : public Task
+{
+public:
+    UselessSwitch *caller;
+    WaitForServoTask(UselessSwitch *caller) : Task()
+    {
+        this->caller = caller;
+    }
+    virtual bool checkTrigger() final
+    {
+        return caller->checkServo();
+    }
+    virtual void execute() final
+    {
+        caller->reset();
+    }
+};
+
+void UselessSwitch::update()
+{
+    if (!this->theSwitch->isDown())
+    {
+        UselessSwitchWatcher *watcher = new UselessSwitchWatcher(this);
+        getGlobalScheduler()->scheduleGlobalEvent(watcher);
+    }
     this->servo->setAngle(servoActPos);
-    Task1* task = new Task1(this);
+    WaitForServoTask *task = new WaitForServoTask(this);
     getGlobalScheduler()->scheduleGlobalEvent(task);
 }
 
-
-bool UselessSwitch::checkServo(){
+bool UselessSwitch::checkServo()
+{
     return !theSwitch->isDown();
 }
 
-void UselessSwitch::callback(){
+void UselessSwitch::reset()
+{
     servo->setAngle(servoRestPos);
+    // Reset global scheduler watcher
+    getGlobalScheduler()->scheduleGlobalEvent(new UselessSwitchWatcher(this));
 }

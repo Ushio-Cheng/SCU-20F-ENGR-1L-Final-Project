@@ -9,9 +9,14 @@ private:
      * Is Both trigger Pin and Echo Pin to save a pin.
      */
     int dataPin;
+
 public:
+    /**
+     * Default constructor
+     * @param IOPinNum Data Pin Number, Is Both trigger Pin and Echo Pin to save a pin.
+     */
     DistanceSensor(int IOPinNum);
-    ~DistanceSensor();
+    ~DistanceSensor() {}
     /**
      * Measure distance.
      * THREADT: Blocking, 50-200ms

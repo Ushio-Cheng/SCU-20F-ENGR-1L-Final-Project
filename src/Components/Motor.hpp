@@ -1,8 +1,8 @@
 #ifndef MOTOR_HPP
 #define MOTOR_HPP
 
-
-class Motor{
+class Motor
+{
 private:
     int CtrPin1;
     int CtrPin2;
@@ -16,8 +16,9 @@ private:
      */
     bool travelInReverse;
     bool breakEnabled;
+
 public:
-    Motor(int CtrPin1,int CtrPin2, bool reversed = false);
+    Motor(int CtrPin1, int CtrPin2, bool reversed = false);
     /**
      * set current speed represented between 0 to 255
      * is the speed wanted instead of real speed.
@@ -30,7 +31,7 @@ public:
      * WARNING: the speed get is only expected, not measured by anything.
      * @return from 0 to 255 no direction
      */
-    short int getSpeed(){ return currentSpeed; }
+    short int getSpeed() { return currentSpeed; }
     /**
      * Set Break
      * would set both control pin high for the breaking provided by driver board.

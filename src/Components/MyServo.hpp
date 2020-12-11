@@ -3,11 +3,17 @@
 
 class Servo;
 
-enum ServoDirection{ClockWise, CounterClockWise};
+enum ServoDirection
+{
+    ClockWise,
+    CounterClockWise
+};
 
-class MyServo{
+class MyServo
+{
 private:
-    Servo* servo;
+    Servo *servo;
+
 public:
     MyServo(int pin);
     ~MyServo();

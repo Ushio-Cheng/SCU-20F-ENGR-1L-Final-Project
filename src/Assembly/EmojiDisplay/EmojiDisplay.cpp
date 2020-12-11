@@ -1,33 +1,28 @@
 #include <Arduino.h>
 #include "U8glib.h"
 
-U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);
+U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0);
 
-
-// void draw(void) {
-//     // graphic commands to redraw the complete screen should be placed here  
-//     // u8g.drawBitmapP( 0, 0, 1, 64, raw_bitmap);
-//     // u8g.drawPixel()
-// }
-
+/**
+ * Method that draws the bitmap Picture, Put to the bottom becasue 
+ *      it is too long and don't have any value to read.
+ */
 void draw();
 
-// void draw(void) {
-//     // graphic commands to redraw the complete screen should be placed here  
-//     u8g.setFont(u8g_font_unifont);
-//     u8g.setPrintPos(5, 20); 
-//     // call procedure from base class, http://arduino.cc/en/Serial/Print
-//     u8g.print("");
-// }
-
-
-void showEmoji() {
-  // picture loop
-    u8g.firstPage();  
-    do {
+/**
+ * Display "(｡･ω･｡)" on screen
+ * More emoji is originally planned but would take way to much time to manually punching in bit map data.
+ */
+void showEmoji()
+{
+    u8g.firstPage();
+    do
+    {
         draw();
-    } while( u8g.nextPage() );
+    } while (u8g.nextPage());
 }
+
+// DON't Format this!
 
 void draw(){
     u8g.drawPixel( 27, 20);
