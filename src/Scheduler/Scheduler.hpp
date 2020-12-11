@@ -74,9 +74,9 @@ class Scheduler
 {
 private:
     Task *scheduledTasks[MAX_SCHEDULER_TASK];
-    int scheduledTasksCount = 0;
-    int triggeredTasksIndex[MAX_SCHEDULER_TASK];
-    int triggeredTasksCount = 0;
+    unsigned int scheduledTasksCount = 0;
+    unsigned int triggeredTasksIndex[MAX_SCHEDULER_TASK];
+    unsigned int triggeredTasksCount = 0;
 
 public:
     Scheduler() {}

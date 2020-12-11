@@ -10,7 +10,7 @@ DifferentialDrive::DifferentialDrive(Motor *leftMotor, Motor *rightMotor, double
     this->breakEnabled = false;
 }
 
-void DifferentialDrive::setSpeed(unsigned char speed, TurnDirection direction = None, int radius = 100)
+void DifferentialDrive::setSpeed(unsigned char speed, TurnDirection direction, int radius)
 {
     // make sure break is released.
     setBreakStatus(false);
@@ -38,11 +38,13 @@ void DifferentialDrive::setSpeed(unsigned char speed, TurnDirection direction = 
             rightMotor->setSpeed(lspeed);
             leftMotor->setSpeed(speed);
             break;
+        case None:
+            return; // Unreachable but just to stop the warning
         }
     }
 }
 
-void DifferentialDrive::setBreakStatus(bool applied = true)
+void DifferentialDrive::setBreakStatus(bool applied)
 {
     leftMotor->setBreak(applied);
     rightMotor->setBreak(applied);
